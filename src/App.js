@@ -1,36 +1,33 @@
 import React, { Component } from 'react';
-import Header from './Header.js';
-import Body from './Body.js';
-import Footer from './Footer.js';
-
+import User from './user.js';
+import { connect } from 'react-redux';
 class App extends Component {
-  constructor(){
-    super();
-    this.state={
-      data:[],
-      message:"On",
-      type:""
-    };
-    this.changeMessage=this.changeMessage.bind(this);
-  }
-  changeMessage(){
-    this.setState({message:"Off"});
-  }
-  onChange(event){
-    this.setState({type:event.target.value});
-  }
   render() {
       return(
         <div>
-          <Header/>
-          <Body title="Test Props" id="10"/>
-          <Footer/>
-          <button onClick={this.changeMessage}>{this.state.message}</button><br/><br/>
-          <input type="text" onChange={this.onChange.bind(this)}/>
-          <p>Type : {this.state.type}</p>
+          <User username={this.props.user.name}/>
+          <button onClick={()=>this.props.setName('Test')}>Change Name</button>
         </div>
       );
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    salary: state.salary,
+    user: state.user,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setName : (name) =>{
+      dispatch({
+        type: 'setName',
+        payload: name,
+      });
+    }
+  }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(App);
